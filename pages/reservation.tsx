@@ -17,7 +17,7 @@ interface Formula {
 const Reservation: NextPage = () => {
   const router = useRouter();
   const { service: initialService } = router.query;
-  
+
   const [formulas, setFormulas] = useState<Formula[]>([]);
   const [selectedService, setSelectedService] = useState<string>('');
   const [formulasLoading, setFormulasLoading] = useState(true);
@@ -33,7 +33,7 @@ const Reservation: NextPage = () => {
     time: '',
     notes: ''
   });
-  
+
   const [photos, setPhotos] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
@@ -71,7 +71,6 @@ const Reservation: NextPage = () => {
     }
   }, [initialService, formulas]);
 
-  // Check available times when date changes
   useEffect(() => {
     if (formData.date) {
       checkAvailableTimes(formData.date);
@@ -82,7 +81,6 @@ const Reservation: NextPage = () => {
     try {
       const response = await fetch(`/api/availability?date=${date}`);
       const data = await response.json();
-      
       if (response.ok) {
         setAvailableTimes(data.availableTimes);
         setFormData(prev => ({ ...prev, time: '' }));
@@ -99,11 +97,9 @@ const Reservation: NextPage = () => {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    // Ensure date is not in the past
     const selectedDate = new Date(value);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
     if (selectedDate >= today) {
       setFormData(prev => ({ ...prev, date: value }));
     } else {
@@ -113,16 +109,11 @@ const Reservation: NextPage = () => {
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
-    // Limit to 10 photos
     if (photos.length + files.length > 10) {
       setError('Maximum 10 photos autorisées');
       return;
     }
-
     setPhotos(prev => [...prev, ...files]);
-    
-    // Create preview URLs
     const newPreviewUrls = files.map(file => URL.createObjectURL(file));
     setPreviewUrls(prev => [...prev, ...newPreviewUrls]);
     setError('');
@@ -142,27 +133,20 @@ const Reservation: NextPage = () => {
     setError('');
 
     try {
-      // Validate required fields
-      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || 
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone ||
           !formData.address || !formData.date || !formData.time) {
         setError('Tous les champs obligatoires doivent être remplis.');
         setLoading(false);
         return;
       }
 
-      // Convert images to base64
       const photosBase64: Array<{ name: string; data: string; type: string }> = [];
-      
       for (const photo of photos) {
         const reader = new FileReader();
         const promise = new Promise<void>((resolve) => {
           reader.onload = () => {
             const base64 = reader.result as string;
-            photosBase64.push({
-              name: photo.name,
-              data: base64,
-              type: photo.type
-            });
+            photosBase64.push({ name: photo.name, data: base64, type: photo.type });
             resolve();
           };
         });
@@ -187,9 +171,7 @@ const Reservation: NextPage = () => {
 
       const response = await fetch('/api/reservations/create', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
 
@@ -197,10 +179,7 @@ const Reservation: NextPage = () => {
 
       if (response.ok) {
         setSubmitted(true);
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          router.push('/confirmation');
-        }, 2000);
+        setTimeout(() => { router.push('/confirmation'); }, 2000);
       } else {
         setError(result.message || 'Erreur lors de la création de la réservation');
       }
@@ -235,8 +214,6 @@ const Reservation: NextPage = () => {
     );
   }
 
-  const currentFormula = formulas.find(f => f.id === selectedService);
-
   if (formulasLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-navy via-navy-dark to-navy">
@@ -261,15 +238,17 @@ const Reservation: NextPage = () => {
     );
   }
 
+  const currentFormula = formulas.find(f => f.id === selectedService);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-navy via-navy-dark to-navy">
       <Header />
-      <main className="flex-grow py-12 px-6">
+      <main className="flex-grow py-8 md:py-12 px-4 md:px-6">
         <div className="container mx-auto max-w-4xl">
-          <h1 className="text-4xl font-black text-gold mb-2">Nouvelle Réservation</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-gold mb-2">Nouvelle Réservation</h1>
           <p className="text-text-light/80 mb-8">Remplissez le formulaire ci-dessous pour confirmer votre réservation</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Main Form */}
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -280,17 +259,17 @@ const Reservation: NextPage = () => {
                 )}
 
                 {/* Personal Information */}
-                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-gold mb-4">Informations Personnelles</h2>
-                  
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold text-gold mb-4">Informations Personnelles</h2>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <input
                       type="text"
                       name="firstName"
                       placeholder="Prénom *"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
+                      className="w-full bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
                       required
                     />
                     <input
@@ -299,7 +278,7 @@ const Reservation: NextPage = () => {
                       placeholder="Nom *"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
+                      className="w-full bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
                       required
                     />
                   </div>
@@ -316,7 +295,7 @@ const Reservation: NextPage = () => {
                     />
                   </div>
 
-                  <div className="mb-4">
+                  <div>
                     <input
                       type="tel"
                       name="phone"
@@ -330,9 +309,9 @@ const Reservation: NextPage = () => {
                 </div>
 
                 {/* Address Information */}
-                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-gold mb-4">Adresse</h2>
-                  
+                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold text-gold mb-4">Adresse</h2>
+
                   <div className="mb-4">
                     <input
                       type="text"
@@ -345,14 +324,14 @@ const Reservation: NextPage = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input
                       type="text"
                       name="city"
                       placeholder="Ville"
                       value={formData.city}
                       onChange={handleInputChange}
-                      className="bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
+                      className="w-full bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
                     />
                     <input
                       type="text"
@@ -360,16 +339,16 @@ const Reservation: NextPage = () => {
                       placeholder="Code postal"
                       value={formData.postalCode}
                       onChange={handleInputChange}
-                      className="bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
+                      className="w-full bg-navy/50 border border-gold/30 rounded py-2 px-3 text-text-light placeholder-text-light/50 focus:outline-none focus:border-gold"
                     />
                   </div>
                 </div>
 
                 {/* Date & Time Selection */}
-                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-gold mb-4">Date et Heure</h2>
-                  
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold text-gold mb-4">Date et Heure</h2>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-text-light/80 text-sm mb-2">Date *</label>
                       <input
@@ -405,10 +384,10 @@ const Reservation: NextPage = () => {
                 </div>
 
                 {/* Photos Upload */}
-                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-gold mb-4">Photos du Véhicule</h2>
+                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold text-gold mb-4">Photos du Véhicule</h2>
                   <p className="text-text-light/70 text-sm mb-4">Ajoutez des photos de votre véhicule (maximum 10 fichiers, tous formats acceptés)</p>
-                  
+
                   <div className="mb-4">
                     <label className="block w-full border-2 border-dashed border-gold/40 rounded-lg p-6 text-center cursor-pointer hover:border-gold/80 transition">
                       <svg className="w-8 h-8 mx-auto mb-2 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -426,18 +405,17 @@ const Reservation: NextPage = () => {
                     </label>
                   </div>
 
-                  {/* Photo Previews */}
                   {photos.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                       {previewUrls.map((url, index) => (
                         <div key={index} className="relative group">
-                          <img src={url} alt={`Preview ${index}`} className="w-full h-24 object-cover rounded border border-gold/30" />
+                          <img src={url} alt={`Preview ${index}`} className="w-full h-20 md:h-24 object-cover rounded border border-gold/30" />
                           <button
                             type="button"
                             onClick={() => removePhoto(index)}
                             className="absolute top-1 right-1 bg-red-600 rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
                           >
-                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                           </button>
@@ -449,8 +427,8 @@ const Reservation: NextPage = () => {
                 </div>
 
                 {/* Notes */}
-                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-6">
-                  <h2 className="text-xl font-bold text-gold mb-4">Remarques Additionnelles</h2>
+                <div className="bg-navy-light/30 border border-gold/20 rounded-lg p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold text-gold mb-4">Remarques Additionnelles</h2>
                   <textarea
                     name="notes"
                     placeholder="Des détails particuliers? (Problèmes spécifiques, préférences, etc.)"
@@ -473,10 +451,9 @@ const Reservation: NextPage = () => {
 
             {/* Service Summary Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-navy-light/30 border-2 border-gold rounded-lg p-6 sticky top-8">
+              <div className="bg-navy-light/30 border-2 border-gold rounded-lg p-4 md:p-6 lg:sticky lg:top-8">
                 <h3 className="text-lg font-bold text-gold mb-6">Résumé</h3>
 
-                {/* Change Service */}
                 <div className="mb-6">
                   <p className="text-text-light/80 text-sm mb-3">Changer de formule:</p>
                   <div className="space-y-2">
@@ -497,7 +474,6 @@ const Reservation: NextPage = () => {
                   </div>
                 </div>
 
-                {/* Current Service Details */}
                 {currentFormula && (
                   <div className="border-t border-gold/30 pt-6">
                     <h4 className="text-text-light font-bold mb-3">Service Sélectionné</h4>
@@ -505,7 +481,6 @@ const Reservation: NextPage = () => {
                     <p className="text-text-light font-semibold mb-2">{currentFormula.name}</p>
                     <p className="text-text-light/70 text-sm mb-6">{currentFormula.description}</p>
 
-                    {/* Reservation Summary */}
                     <div className="bg-navy/50 rounded p-4 space-y-3 text-sm">
                       {formData.firstName && (
                         <div>

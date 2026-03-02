@@ -33,15 +33,15 @@ const Gallery: NextPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-navy via-navy-dark to-navy">
       <Header />
-      <main className="flex-grow py-16 px-6">
+      <main className="flex-grow py-10 md:py-16 px-4 md:px-6">
         <div className="container mx-auto">
           {/* Header */}
-          <div className="mb-12">
-            <p className="text-gold text-sm font-bold tracking-widest mb-4">NOS RÉALISATIONS</p>
-            <h1 className="text-5xl font-bold text-text-light mb-4">
+          <div className="mb-8 md:mb-12">
+            <p className="text-gold text-xs md:text-sm font-bold tracking-widest mb-4">NOS RÉALISATIONS</p>
+            <h1 className="text-3xl md:text-5xl font-bold text-text-light mb-4">
               Galerie de nos <span className="text-gold">Services</span>
             </h1>
-            <p className="text-text-light/70 max-w-2xl">
+            <p className="text-text-light/70 max-w-2xl text-sm md:text-base">
               Découvrez nos réalisations et la qualité de nos services de détailing et lavage automobile.
             </p>
           </div>
@@ -56,7 +56,7 @@ const Gallery: NextPage = () => {
               <p className="text-text-light/60">Aucune image dans la galerie pour le moment</p>
             </div>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-6 space-y-4 md:space-y-6">
               {images.map((image) => (
                 <div
                   key={image.id}
@@ -67,8 +67,8 @@ const Gallery: NextPage = () => {
                     alt={image.title}
                     className="w-full h-auto"
                   />
-                  <div className="p-5">
-                    <h3 className="text-text-light font-bold text-lg mb-1 group-hover:text-gold transition">
+                  <div className="p-4 md:p-5">
+                    <h3 className="text-text-light font-bold text-base md:text-lg mb-1 group-hover:text-gold transition">
                       {image.title}
                     </h3>
                     {image.description && (
