@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom global rules */
+body {
+  @apply bg-navy text-text-light;
+}

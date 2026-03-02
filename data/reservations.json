@@ -1,0 +1,43 @@
+[
+  {
+    "id": "res_example_1",
+    "firstName": "Jean",
+    "lastName": "Dupont",
+    "email": "jean.dupont@example.com",
+    "phone": "438-493-1451",
+    "address": "123 Rue de la Paix",
+    "city": "Saint-Pie",
+    "postalCode": "J0H 1W0",
+    "service": "detailing_premium",
+    "date": "2026-03-15",
+    "time": "14:00",
+    "notes": "Service complet avec protection premium",
+    "photos": [],
+    "status": "completed",
+    "createdAt": "2026-03-01T12:00:00Z",
+    "comments": "testinh"
+  },
+  {
+    "id": "res_1772354069966",
+    "firstName": "Gabriel",
+    "lastName": "Toummanivanh-Boissy",
+    "email": "gabrielboissy234432@gmail.com",
+    "phone": "5148132549",
+    "address": "7121 Nakiska Dr",
+    "city": "Vernon",
+    "postalCode": "V1B 3M5",
+    "service": "promotion_hivernale",
+    "date": "2026-03-18",
+    "time": "09:00",
+    "notes": "wad",
+    "photos": [],
+    "status": "confirmed",
+    "createdAt": "2026-03-01T08:34:29.966Z",
+    "comments": "adad",
+    "technician": "sam",
+    "invoice": "/uploads/admin/admin_1772356567751_aaeuql.pdf",
+    "pictures": [
+      "/uploads/admin/admin_1772356574575_ocubmh.png"
+    ]
+  }
+]

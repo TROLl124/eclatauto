@@ -1,0 +1,62 @@
+{
+  "promotion": {
+    "name": "Promotion Hivernale",
+    "active": true,
+    "description": "Profitez de notre promotion hivernale exclusive ! Lavage extérieur à la main + Détailing intérieur premium + Ciré de protection + Tiré shine."
+  },
+  "formulas": [
+    {
+      "id": "promotion_hivernale",
+      "name": "Promotion Hivernale",
+      "price": 249.99,
+      "description": "Profitez de notre promotion hivernale exclusive ! Lavage extérieur à la main + Détailing intérieur premium + Ciré de protection + Tiré shine.",
+      "features": [
+        "Lavage extérieur",
+        "Détailing intérieur",
+        "Ciré premium",
+        "Tiré shine"
+      ],
+      "featured": false,
+      "order": 1
+    },
+    {
+      "id": "packages_economiques",
+      "name": "Packages Économiques",
+      "price": 300,
+      "description": "2 services payés + 1 service offert + Économies garanties",
+      "features": [
+        "2 services payés",
+        "1 service offert",
+        "Économies garanties",
+        "Flexible"
+      ],
+      "featured": false,
+      "order": 2
+    },
+    {
+      "id": "detailing_premium",
+      "name": "Détailing Premium",
+      "price": 299.99,
+      "description": "Lavage à la main + Décontamination + Protection premium + Shampooing complet",
+      "features": [
+        "Lavage à la main",
+        "Décontamination",
+        "Protection premium",
+        "Shampooing complet"
+      ],
+      "featured": true,
+      "order": 3
+    }
+  ],
+  "businessHours": {
+    "start": 8,
+    "end": 18,
+    "lunchStart": 12,
+    "lunchEnd": 13
+  },
+  "contact": {
+    "phone": "438-493-1451",
+    "email": "info@eclatauto.com",
+    "address": "Saint-Pie, QC"
+  }
+}
